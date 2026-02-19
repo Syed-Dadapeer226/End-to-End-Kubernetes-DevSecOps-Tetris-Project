@@ -27,9 +27,7 @@ sudo apt update
 sudo apt install jenkins -y
 sudo systemctl start jenkins
 sudo systemctl enable jenkins
-sudo systemctl status jenkins
-jenkins_version=$(sudo systemctl status jenkins | grep -oP 'version \K[0-9.]+')
-echo "Jenkins version: $jenkins_version"
+jenkins --version
 
 # Installing Docker
 sudo apt update
