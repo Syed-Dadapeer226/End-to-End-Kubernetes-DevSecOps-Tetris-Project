@@ -1,5 +1,5 @@
-# Use the official Node.js 16 image as the base image
-FROM node:16
+# Use the official Node.js 20 LTS image as the base image
+FROM node:20-alpine
 
 # Set the working directory inside the container
 WORKDIR /app
@@ -20,4 +20,4 @@ RUN npm run build
 EXPOSE 3000
 
 # Start the React app when the container starts
-CMD [ "npm", "start" ]
+CMD ["npm", "start"]
