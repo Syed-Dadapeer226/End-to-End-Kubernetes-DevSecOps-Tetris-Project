@@ -84,19 +84,22 @@ sudo apt-get install trivy -y
 trivy --version
 
 # Installing helm
-curl https://baltocdn.com/helm/signing.asc | sudo gpg --dearmor -o /usr/share/keyrings/helm.gpg
-echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/helm.gpg] https://baltocdn.com/helm/stable/debian/ all main" | sudo tee /etc/apt/sources.list.d/helm-stable-debian.list
-sudo apt update
-sudo apt install helm -y
-helm version --short
+sudo apt update && sudo apt upgrade -y
+curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash 
+helm version
 
-# Display the installed versions of all tools
-echo "Installed Versions:"
-echo "Java: $(java --version | head -n 1)"
-echo "Jenkins: $(jenkins --version)"
-echo "Docker: $(docker --version)"
-echo "Terraform: $(terraform -version | head -n 1)"
-echo "Kubectl: $(kubectl version --client --short | awk '{print $3}')"
-echo "AWS CLI: $(aws --version | awk '{print $1}' | cut -d/ -f2)"
-echo "Trivy: $(trivy --version | head -n 1)"
-echo "Helm: $(helm version --short | awk -F: '{print $2}' | tr -d 'v')"
+if [ $? -eq 0 ]; then
+    echo -e "\e[32mAll tools installed successfully! \e[0m"
+    # Display the installed versions of all tools
+    echo -e "\e[32mInstalled Versions:\e[0m"
+    echo "Java: $(java --version | head -n 1 | cut -d " " -f 1,2)"
+    echo "Jenkins: $(jenkins --version)"
+    echo "Docker: $(docker --version | awk '{print $3}' | cut -d, -f1)"
+    echo "Terraform: $(terraform -version | head -n 1 | cut -d " " -f 2)"
+    echo "Kubectl: $(kubectl version --client | head -n 1 | cut -d " " -f 3)"
+    echo "AWS CLI: $(aws --version | awk '{print $1}' | cut -d/ -f2)"
+    echo "Trivy: $(trivy --version | head -n 1 | cut -d " " -f 2)"
+    echo "Helm: $(helm version --short | cut -d+ -f1 | cut -d v -f2)"
+else
+    echo -e "\e[31mError installing tools. Please check the output above for details.\e[0m"
+fi
