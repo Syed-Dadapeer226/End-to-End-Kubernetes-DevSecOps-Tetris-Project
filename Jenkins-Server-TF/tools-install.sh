@@ -82,3 +82,21 @@ echo "deb [signed-by=/usr/share/keyrings/trivy.gpg] https://aquasecurity.github.
 sudo apt-get update
 sudo apt-get install trivy -y
 trivy --version
+
+# Installing helm
+curl https://baltocdn.com/helm/signing.asc | sudo gpg --dearmor -o /usr/share/keyrings/helm.gpg
+echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/helm.gpg] https://baltocdn.com/helm/stable/debian/ all main" | sudo tee /etc/apt/sources.list.d/helm-stable-debian.list
+sudo apt update
+sudo apt install helm -y
+helm version --short
+
+# Display the installed versions of all tools
+echo "Installed Versions:"
+echo "Java: $(java --version | head -n 1)"
+echo "Jenkins: $(jenkins --version)"
+echo "Docker: $(docker --version)"
+echo "Terraform: $(terraform -version | head -n 1)"
+echo "Kubectl: $(kubectl version --client --short | awk '{print $3}')"
+echo "AWS CLI: $(aws --version | awk '{print $1}' | cut -d/ -f2)"
+echo "Trivy: $(trivy --version | head -n 1)"
+echo "Helm: $(helm version --short | awk -F: '{print $2}' | tr -d 'v')"
